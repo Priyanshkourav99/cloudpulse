@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cloudpulse-backend
+  namespace: cloudpulse
+  labels:
+    app: cloudpulse
+    component: backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cloudpulse
+      component: backend
+  template:
+    metadata:
+      labels:
+        app: cloudpulse
+        component: backend
+    spec:
+      containers:
+        - name: backend
+          image: ${ACR_NAME}.azurecr.io/cloudpulse-backend:latest
+          ports:
+            - containerPort: 3001
+              protocol: TCP
+          envFrom:
+            - configMapRef:
+                name: cloudpulse-config
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 500m
+              memory: 256Mi
+          readinessProbe:
+            httpGet:
+              path: /api/ready
+              port: 3001
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            timeoutSeconds: 3
+          livenessProbe:
+            httpGet:
+              path: /api/health
+              port: 3001
+            initialDelaySeconds: 10
+            periodSeconds: 15
+            timeoutSeconds: 3
+

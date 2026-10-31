@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: cloudpulse-frontend
+  namespace: cloudpulse
+  labels:
+    app: cloudpulse
+    component: frontend
+spec:
+  type: LoadBalancer
+  selector:
+    app: cloudpulse
+    component: frontend
+  ports:
+    - port: 80
+      targetPort: 80
+      protocol: TCP
+      name: http
+

@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: cloudpulse-redis
+  namespace: cloudpulse
+  labels:
+    app: cloudpulse
+    component: redis
+spec:
+  type: ClusterIP
+  selector:
+    app: cloudpulse
+    component: redis
+  ports:
+    - port: 6379
+      targetPort: 6379
+      protocol: TCP
+      name: redis
+
